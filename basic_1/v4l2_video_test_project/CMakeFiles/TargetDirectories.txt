@@ -1,0 +1,1 @@
+/root/v4l2_/basic_1/v4l2_video_test_project/CMakeFiles/opencv_dis.dir
