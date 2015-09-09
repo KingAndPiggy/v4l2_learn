@@ -101,9 +101,9 @@ void
 err_ret(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(1, errno, fmt, ap);
-		    va_end(ap);
+	  va_start(ap, fmt);
+	  err_doit(1, errno, fmt, ap);
+	  va_end(ap);
 }
 /*
     * Fatal error related to a system call.
@@ -113,10 +113,10 @@ void
 err_sys(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(1, errno, fmt, ap);
-		    va_end(ap);
-			  exit(1);
+	  va_start(ap, fmt);
+	  err_doit(1, errno, fmt, ap);
+	  va_end(ap);
+	  exit(1);
 }
 /*
     * Nonfatal error unrelated to a system call.
@@ -127,9 +127,9 @@ void
 err_cont(int error, const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(1, errno, fmt, ap);
-		    va_end(ap);
+	  va_start(ap, fmt);
+	  err_doit(1, errno, fmt, ap);
+	  va_end(ap);
 }
 /*
     * Fatal error unrelated to a system call.
@@ -140,10 +140,10 @@ void
 err_exit(int error, const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(1, errno, fmt, ap);
-		    va_end(ap);
-			  exit(1);
+	  va_start(ap, fmt);
+	  err_doit(1, errno, fmt, ap);
+	  va_end(ap);
+	  exit(1);
 }
 /*
     * Fatal error related to a system call.
@@ -153,11 +153,11 @@ void
 err_dump(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(1, errno, fmt, ap);
-		    va_end(ap);
-			  abort(); /* core dump and terminate */
-			    exit(1); /* should't get here */
+	  va_start(ap, fmt);
+	  err_doit(1, errno, fmt, ap);
+	  va_end(ap);
+	  abort(); /* core dump and terminate */
+	  exit(1); /* should't get here */
 }
 /*
     * Nonfatal error unrelated to a system call.
@@ -167,9 +167,9 @@ void
 err_msg(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(0, 0, fmt, ap);
-		    va_end(ap);
+	  va_start(ap, fmt);
+	  err_doit(0, 0, fmt, ap);
+	  va_end(ap);
 }
 /*
     * Fatal error unrelated to a system call.
@@ -179,10 +179,10 @@ void
 err_quit(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  err_doit(0, 0, fmt, ap);
-		    va_end(ap);
-			  exit(1);
+	  va_start(ap, fmt);
+	  err_doit(0, 0, fmt, ap);
+	  va_end(ap);
+	  exit(1);
 }
 /*
     * Print a message and return to caller.
@@ -192,14 +192,14 @@ static void
 err_doit(int errnoflag, int error, const char *fmt, va_list ap)
 {
 	  char buf[MAXLINE];
-	    vsnprintf(buf, MAXLINE-1, fmt, ap);
-		  if(errnoflag){
-			      snprintf(buf+strlen(buf), MAXLINE-strlen(buf) - 1, ": %s", strerror(error));
-				    }
-		    strcat(buf, "\n");
-			  fflush(stdout); /* in case stdout and stderr are the same */
-			    fputs(buf, stderr);
-				  fflush(NULL); /* flushes all stdio output streams */
+	  vsnprintf(buf, MAXLINE-1, fmt, ap);
+	  if(errnoflag){
+		  snprintf(buf+strlen(buf), MAXLINE-strlen(buf) - 1, ": %s", strerror(error));
+	  }
+	  strcat(buf, "\n");
+	  fflush(stdout); /* in case stdout and stderr are the same */
+	  fputs(buf, stderr);
+	  fflush(NULL); /* flushes all stdio output streams */
 }
 #include <syslog.h>
 static void log_doit(int, int, int, const char *, va_list ap);
@@ -212,7 +212,7 @@ log_open(const char *ident, int option, int facility)
 {
 	  if(log_to_stderr == 0){
 		      openlog(ident, option, facility);
-			    }
+	  }
 }
 /*
     * Nonfatal error related to a system call.
@@ -222,9 +222,9 @@ void
 log_ret(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  log_doit(1, errno, LOG_ERR, fmt, ap);
-		    va_end(ap);
+	  va_start(ap, fmt);
+	  log_doit(1, errno, LOG_ERR, fmt, ap);
+	  va_end(ap);
 }
 /*
     * Fatal error related to a system call.
@@ -234,10 +234,10 @@ void
 log_sys(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  log_doit(1, errno, LOG_ERR, fmt, ap);
-		    va_end(ap);
-			  exit(2);
+	  va_start(ap, fmt);
+	  log_doit(1, errno, LOG_ERR, fmt, ap);
+	  va_end(ap);
+	  exit(2);
 }
 /*
     * Nonfatal error unrelated to a system call.
@@ -247,9 +247,9 @@ void
 log_msg(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  log_doit(0, 0, LOG_ERR, fmt, ap);
-		    va_end(ap);
+	  va_start(ap, fmt);
+	  log_doit(0, 0, LOG_ERR, fmt, ap);
+	  va_end(ap);
 }
 /*
     * Fatal error related to a system call.
@@ -259,10 +259,10 @@ void
 log_quit(const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  log_doit(0, 0, LOG_ERR, fmt, ap);
-		    va_end(ap);
-			  exit(2);
+	  va_start(ap, fmt);
+	  log_doit(0, 0, LOG_ERR, fmt, ap);
+	  va_end(ap);
+	  exit(2);
 }
 /*
     * Fatal error related to a system call.
@@ -273,10 +273,10 @@ void
 log_exit(int error, const char *fmt, ...)
 {
 	  va_list ap;
-	    va_start(ap, fmt);
-		  log_doit(1, error, LOG_ERR, fmt, ap);
-		    va_end(ap);
-			  exit(2);
+	  va_start(ap, fmt);
+	  log_doit(1, error, LOG_ERR, fmt, ap);
+	  va_end(ap);
+	  exit(2);
 }
 /*
     * Print a message and return to caller.
@@ -285,19 +285,19 @@ log_exit(int error, const char *fmt, ...)
 static void 
 log_doit(int errnoflag, int error, int priority, const char *fmt, va_list ap)
 {
-	  char buf[MAXLINE];
-	    vsnprintf(buf, MAXLINE-1, fmt, ap);
-		  if(errnoflag){
-			      snprintf(buf+strlen(buf), MAXLINE-strlen(buf)-1, ": %s", strerror(error));
-				    }
-		    strcat(buf, "\n");
-			  if(log_to_stderr){
-				      fflush(stdout);
-					      fputs(buf, stderr);
-						      fflush(stderr);
-							    }else{
-									    syslog(priority, "%s", buf);
-										  }
+	char buf[MAXLINE];
+    vsnprintf(buf, MAXLINE-1, fmt, ap);
+	if(errnoflag){
+		snprintf(buf+strlen(buf), MAXLINE-strlen(buf)-1, ": %s", strerror(error));
+	}
+	strcat(buf, "\n");
+	if(log_to_stderr){
+	    fflush(stdout);
+	    fputs(buf, stderr);
+	    fflush(stderr);
+	}else{
+	    syslog(priority, "%s", buf);
+	}
 }
 #include <sys/wait.h>
 void 
@@ -320,23 +320,23 @@ void
 pr_mask(const char *str)
 {
 	  sigset_t sigset;
-	    int errno_save;
-		  errno_save = errno;
-		    if(sigprocmask(0, NULL, &sigset) < 0){
-				    err_ret("sigprocmask error");
-					  }else {
-						      printf("%s", str);
-							       
-							      if(sigismember(&sigset, SIGINT))
-									        printf(" SIGINT");
-								      if(sigismember(&sigset, SIGQUIT))
-										        printf(" SIGQUIT");
-									      if(sigismember(&sigset, SIGUSR1))
-											        printf(" SIGUSR1");
-										      if(sigismember(&sigset, SIGALRM))
-												        printf(" SIGALRM");
-											      printf("\n");
-												    }
-			  errno = errno_save;
+	  int errno_save;
+	  errno_save = errno;
+	  if(sigprocmask(0, NULL, &sigset) < 0){
+		  err_ret("sigprocmask error");
+	  }else {
+	      printf("%s", str);
+			       
+	      if(sigismember(&sigset, SIGINT))
+			  printf(" SIGINT");
+	      if(sigismember(&sigset, SIGQUIT))
+		      printf(" SIGQUIT");
+	      if(sigismember(&sigset, SIGUSR1))
+		      printf(" SIGUSR1");
+		  if(sigismember(&sigset, SIGALRM))
+		      printf(" SIGALRM");
+		  printf("\n");
+	}
+	errno = errno_save;
 }
 #endif
