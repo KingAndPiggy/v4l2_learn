@@ -25,12 +25,13 @@ struct v4l2_device {
 };
 
 struct v4l2_device *v4l2_init(char *devname, uint16_t width, uint16_t height, uint8_t buffers_cnt);
-
+void *v4l2_capture(struct v4l2_device *dev1);
 int main()
 {
 	struct v4l2_device *dev;
 
 	dev = v4l2_init("/dev/video0", 640, 480, 4);
+	v4l2_capture(dev);
 
 	printf("success\n");
 	close(dev->fd);
@@ -127,4 +128,51 @@ struct v4l2_device *v4l2_init(char *devname, uint16_t width, uint16_t height, ui
 	dev->buffers = buffers;
 
 	return dev;
+}
+void *v4l2_capture(struct v4l2_device *dev1)
+{
+	struct v4l2_device *dev = dev1;
+	struct v4l2_buffer buf;
+	struct timeval tv;
+	fd_set fds;
+	FILE *img_fd; 
+
+	img_fd = fopen("test.jpg", "w");
+	while(TRUE) {
+		FD_ZERO(&fds);
+		FD_SET(dev->fd, &fds);
+
+		//超时设定
+		tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+		//wait until am image was taken, with a timeout of tv
+		int sr = select(dev->fd + 1, &fds, NULL, NULL, &tv);
+		if(sr < 0) {
+			//was interrupted by a signa;
+			if (EINTR == errno) { continue; }
+			printf("[v4l2-capture] select error %d on %s: %s\n", errno, dev->name, strerror(errno));
+			return (void *) -1;
+		}
+		else if(sr == 0){
+			printf("[v4l2-capture] select timeout on %s", dev->name);
+		//continue;
+		return (void *) -2;
+		}
+		//dequeue a buffer
+		CLEAR(buf);
+		buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		buf.memory = V4L2_MEMORY_MMAP;
+		if (ioctl(dev->fd, VIDIOC_DQBUF, &buf) < 0) {
+			printf("[v4l2-capture] dequeue of buffer failed for %s.\n", dev->name);
+			return (void *) -3;
+		} 
+		assert(buf.index < dev->buffers_cnt);
+
+
+		fwrite(dev->buffers->buf, dev->buffers->length, 1, img_fd);	//copy
+		printf("wait size:%d\n", (int)dev->buffers->length);
+		fclose(img_fd);
+		break;
+	}
 }
